@@ -20,7 +20,7 @@ class DevelopmentConfig(Config):
 	MAIL_PORT = 25
 	MAIL_USE_TLS = True
 	MAIL_USERNAME = 'shanhaihang@163.com'
-	#dddd
+	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 	MAIL_SENDER = 'shanhaihang@163.com'
 	FLASKY_ADMIN = '304035020@qq.com'
 	FLASKY_POSTS_PER_PAGE = 10
