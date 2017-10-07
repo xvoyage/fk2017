@@ -1,0 +1,32 @@
+{% extends 'user.html'%}
+{% block message%}
+<h3>Followed</h3>
+
+<ul class="posts">
+	{% for f in follow %}
+	<li class="post">
+	<div class="profile-thumbnail">
+		<a href="{{url_for('.user', username=f['user'])}}">
+			<img class="img-rounded profile-thumbnail"
+				src="{{ f['img'] }}">
+		</a>
+	</div>
+	<div class="post-content">
+	<div class="post-date">{{moment(f['timestamp']).format('L')}}</div>
+	<div class="post-author">
+		<a href="{{ url_for('.user', username=f['user'])}}">
+			{{ f['user']}}
+		</a>
+	</div>
+	<div class="post-footer">
+		{% if current_user.is_authenticated %}
+		<a href="{{url_for('.unfollow', username=f['user'])}}">
+			<span class="label label-primary">UnFollow</span>
+		</a>
+		{% endif %}
+	</div>
+</div>
+</li>
+{% endfor %}
+</ul>
+{% endblock %}

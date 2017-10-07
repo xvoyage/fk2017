@@ -140,9 +140,36 @@ def unfollow(username):
 	return redirect(url_for('.user', username=username))
 
 @main.route('/followers/<username>')
+@login_required
 def followers(username):
-	pass
+	user = User.query.filter_by(username=username).first()
+	if user is None:
+		flash('Invalid user.')
+		return redirect('.index')
+
+	if user.id != current_user.id:
+		flash("You Can't see the follower.")
+		return redirect(url_for('.user', username=username))
+
+	followerslist = [{"user":f.follower.username, "timestamp":f.timestamp,
+						"img":f.follower.gravatar(size=40),"status":user.is_following(f.follower)}
+					for f in user.followers]
+	return render_template('/followers.html', user=user, follow=followerslist)
+
 
 @main.route('/followed/<username>')
+@login_required
 def followed_by(username):
-	pass
+	user = User.query.filter_by(username=username).first()
+	if user is None:
+		flash('Invalid user.')
+		return redirect('.index')
+
+	if user.id != current_user.id:
+		flash("You Can't see the follower.")
+		return redirect(url_for('.user', username=username))
+
+	followerslist = [{"user":f.followed.username, "timestamp":f.timestamp,
+						"img":f.followed.gravatar(size=40)}
+					for f in user.followed]
+	return render_template('/followed.html', user=user, follow=followerslist)
