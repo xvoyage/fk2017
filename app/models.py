@@ -64,6 +64,23 @@ class Follow(db.Model):
 								primary_key=True)
 	timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
+	@staticmethod
+	def generate_fake(count=200):
+		from random import randint, seed
+		from sqlalchemy.exc import IntegrityError
+		import forgery_py
+		user_count = User.query.count()
+		seed()
+		for i in range(count):
+			follower = User.query.offset(randint(0,user_count-1)).first()
+			followed = User.query.offset(randint(0,user_count-1)).first()
+			f = Follow(follower_id=follower.id, followed_id=followed.id)
+			db.session.add(f)
+			try:
+				db.session.commit()
+			except IntegrityError:
+				db.session.rollback()
+
 
 class User(UserMixin, db.Model):
 	__tablename__ = 'users'

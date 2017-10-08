@@ -151,9 +151,14 @@ def followers(username):
 		flash("You Can't see the follower.")
 		return redirect(url_for('.user', username=username))
 
+	page = request.args.get('page', 1, type=int)
+	pagination = user.followers.order_by(Follow.timestamp.desc()).paginate(
+			page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+			error_out=False)
+
 	followerslist = [{"user":f.follower.username, "timestamp":f.timestamp,
 						"img":f.follower.gravatar(size=40),"status":user.is_following(f.follower)}
-					for f in user.followers]
+					for f in pagination.items]
 	return render_template('/followers.html', user=user, follow=followerslist)
 
 
