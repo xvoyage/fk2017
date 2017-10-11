@@ -23,7 +23,7 @@ class DevelopmentConfig(Config):
 	MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 	MAIL_SENDER = 'shanhaihang@163.com'
 	FLASKY_ADMIN = '304035020@qq.com'
-	FLASKY_POSTS_PER_PAGE = 10
+	FLASKY_POSTS_PER_PAGE = 5
 
 
 config = {'development':DevelopmentConfig,'default':DevelopmentConfig}
